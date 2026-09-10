@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PHPSEC — Scan target</title>
+  <title>PHPSEC V2 — Scan target</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
         <span class="mark" aria-hidden="true"></span>
         <div>
           <h1>PHPSEC</h1>
-          <p>Native PHP security analyzer · SQL injection (V1)</p>
+          <p>Native PHP security analyzer · V2 data-flow engine</p>
         </div>
       </div>
       <p class="root-hint">Scan root: <code id="scan-root">…</code></p>

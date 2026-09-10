@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PHPSEC 2.0 report</title>
+<style>
+:root{color-scheme:dark;font:15px/1.55 system-ui,sans-serif;background:#0b1020;color:#e8edf7}body{max-width:1100px;margin:auto;padding:36px 20px}h1{margin:0}h2{font-size:18px;margin:0}.muted,.location{color:#9eabc2}.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:25px 0}.metric,article{background:#141b2d;border:1px solid #29334d;border-radius:10px;padding:18px}.metric b{display:block;font-size:28px}.metric span{font-size:12px;color:#9eabc2}article{margin:14px 0}article header{display:flex;gap:10px;align-items:center}.badge{font-size:11px;font-weight:700;padding:3px 7px;border-radius:5px;background:#34405c}.critical,.high{color:#ff8585}.medium{color:#ffd36b}.low{color:#71d9ef}.info{color:#b8c2d8}pre{overflow:auto;background:#090d17;padding:14px;border-radius:7px;border:1px solid #242d42}
+</style>
+</head>
+<body>
+<h1>PHPSEC 2.0 Security Report</h1>
+<p class="muted">Target: {{TARGET}} · Generated {{GENERATED_AT}} · {{FILES}} files in {{DURATION}}s</p>
+<section class="dashboard"><div class="metric"><b>{{TOTAL}}</b><span>TOTAL</span></div>{{SEVERITY_CARDS}}</section>
+<main>{{FINDINGS}}</main>
+</body>
+</html>

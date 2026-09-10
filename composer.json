@@ -1,0 +1,13 @@
+{
+  "name": "phpsec/phpsec",
+  "description": "Defensive, dependency-free PHP static analysis engine",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "PHPSec\\": "src/"
+    }
+  }
+}

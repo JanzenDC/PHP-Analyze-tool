@@ -133,7 +133,7 @@
   }
 
   function countSeverity(findings) {
-    const counts = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 };
+    const counts = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0, INFO: 0 };
     findings.forEach((f) => {
       const s = String(f.severity || "").toUpperCase();
       if (counts[s] != null) counts[s] += 1;
@@ -233,7 +233,8 @@
       lines.push(`    Source:     ${f.source || "unknown"}`);
       lines.push(`    Sink:       ${f.sink || "—"}`);
       lines.push(`    Flow:       ${hops.join(" -> ")}`);
-      if (f.reason) lines.push(`    Why:        ${f.reason}`);
+      if (f.reason || f.description) lines.push(`    Why:        ${f.reason || f.description}`);
+      if (f.impact) lines.push(`    Impact:     ${f.impact}`);
       if (f.recommendation) lines.push(`    Fix:        ${f.recommendation}`);
       lines.push(thin);
       lines.push("");
@@ -273,17 +274,19 @@
     els.resultsSub.textContent = data.target;
 
     const counts = countSeverity(data.findings || []);
-    els.sevPills.innerHTML = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    els.sevPills.innerHTML = ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
       .map((k) => `<span class="pill ${k.toLowerCase()}">${k} ${counts[k]}</span>`)
       .join("");
 
     const s = data.stats || {};
     els.stats.innerHTML = [
-      ["Files", s.files],
-      ["PHP files", s.phpFiles],
+      ["Files", s.files ?? s.phpFiles],
       ["Statements", s.statements],
-      ["Sink calls", s.sinkCalls],
+      ["Sources", s.sources],
+      ["Sinks", s.sinks ?? s.sinkCalls],
+      ["Functions", s.functions],
     ]
+      .filter(([, value]) => value != null)
       .map(([label, value]) => `<span class="stat">${label}<strong>${value ?? "—"}</strong></span>`)
       .join("");
 
@@ -396,7 +399,7 @@
             .map((h, i) => `<li><code>${escapeHtml(h)}</code>${i < hops.length - 1 ? '<span class="sep">→</span>' : ""}</li>`)
             .join("")}</ol>
         </div>
-        <p class="why">${escapeHtml(f.reason || "")}</p>
+        <p class="why">${escapeHtml(f.reason || f.description || "")}</p>
         <p class="fix">${f.recommendation ? escapeHtml("Fix: " + f.recommendation) : ""}</p>
       </div>
     `;

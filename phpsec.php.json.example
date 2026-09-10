@@ -1,0 +1,17 @@
+{
+  "exclude": ["vendor", "node_modules", ".git", "storage", "cache", "uploads"],
+  "severity": { "min": "INFO" },
+  "confidence": { "min": "LOW" },
+  "rules": {
+    "sql_injection": true,
+    "xss": true,
+    "command_injection": true,
+    "path_traversal": true,
+    "file_inclusion": true,
+    "ssrf": true,
+    "file_upload": true,
+    "dangerous_functions": true,
+    "hardcoded_secrets": true,
+    "weak_security": true
+  }
+}
