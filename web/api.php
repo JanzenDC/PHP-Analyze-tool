@@ -11,6 +11,8 @@ require __DIR__ . '/../src/Web/PathGuard.php';
 use PHPSec\Config\Configuration;
 use PHPSec\Engine\AnalysisEngine;
 
+phpsec_ensure_session();
+
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
@@ -20,8 +22,27 @@ $action = $_GET['action'] ?? $_POST['action'] ?? null;
 if ($method === 'GET' && $action === 'root') {
     echo json_encode([
         'root' => phpsec_scan_root(),
-        'default' => phpsec_scan_root(),
+        'default' => phpsec_default_scan_root(),
+        'ceiling' => phpsec_path_ceiling(),
     ], JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+if ($method === 'POST' && $action === 'set_root') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw ?: '[]', true);
+    if (!is_array($body)) {
+        $body = [];
+    }
+    $path = $body['path'] ?? ($_POST['path'] ?? '');
+    if (!is_string($path) || trim($path) === '') {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing path.']);
+        exit;
+    }
+    $result = phpsec_set_scan_root($path);
+    http_response_code(isset($result['error']) ? 400 : 200);
+    echo json_encode($result, JSON_UNESCAPED_SLASHES);
     exit;
 }
 
@@ -50,7 +71,9 @@ if ($method === 'POST' && $action === 'scan') {
     $resolved = phpsec_resolve_under_root($path);
     if ($resolved === null || (!is_dir($resolved) && !is_file($resolved))) {
         http_response_code(400);
-        echo json_encode(['error' => 'Path not found or outside the allowed scan root.']);
+        echo json_encode([
+            'error' => 'Path not found or outside the allowed scan root (' . phpsec_scan_root() . '). Use Set root to widen.',
+        ]);
         exit;
     }
 
@@ -72,7 +95,6 @@ if ($method === 'POST' && $action === 'scan') {
 
     $stats = $result->stats;
     $findings = array_map(static function (array $row): array {
-        // Web UI compatibility aliases
         $row['reason'] = $row['description'] ?? '';
         return $row;
     }, array_map(static fn ($f) => $f->toArray(), $result->findings->all()));
@@ -98,5 +120,5 @@ if ($method === 'POST' && $action === 'scan') {
 
 http_response_code(400);
 echo json_encode([
-    'error' => 'Unknown action. Use action=root|browse|scan.',
+    'error' => 'Unknown action. Use action=root|set_root|browse|scan.',
 ]);

@@ -19,7 +19,15 @@
           <p>Native PHP security analyzer · V2 data-flow engine</p>
         </div>
       </div>
-      <p class="root-hint">Scan root: <code id="scan-root">…</code></p>
+      <div class="root-controls">
+        <p class="root-hint">Scan root: <code id="scan-root">…</code></p>
+        <form id="root-form" class="root-row" autocomplete="off">
+          <label class="sr-only" for="root-path">Change scan root</label>
+          <input id="root-path" type="text" spellcheck="false" placeholder="Set allowlisted root (e.g. C:\xampp\htdocs)">
+          <button type="submit" class="btn ghost" id="root-btn">Set root</button>
+        </form>
+        <p class="root-ceiling">Ceiling: <code id="path-ceiling">…</code></p>
+      </div>
     </header>
 
     <main class="workspace">
@@ -41,7 +49,7 @@
             <code class="crumbs" id="crumbs">—</code>
           </div>
           <ul class="entries" id="entries" role="list"></ul>
-          <p class="browser-note">Paths outside the scan root are blocked.</p>
+          <p class="browser-note">Targets must stay under the scan root. Use <strong>Set root</strong> to point at <code>htdocs</code> (or another folder under the ceiling) first.</p>
         </div>
 
         <p class="status" id="status" role="status" aria-live="polite"></p>

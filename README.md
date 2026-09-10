@@ -68,7 +68,10 @@ With XAMPP (or any PHP web server) serving this folder:
 3. Click **Scan** — results use the same V2 engine as the CLI
 4. Filter, expand flows, or **Download .txt**
 
-Override the browse/scan root with environment variable `PHPSEC_SCAN_ROOT`.
+Override the browse/scan root with **Set root** in the UI (must stay under the path ceiling, default `C:\xampp`), or with environment variables:
+
+- `PHPSEC_SCAN_ROOT` — default allowlisted root (e.g. `C:\xampp\htdocs`)
+- `PHPSEC_PATH_CEILING` — widest folder the UI may use as root (e.g. `C:\xampp`)
 
 ## Configuration
 

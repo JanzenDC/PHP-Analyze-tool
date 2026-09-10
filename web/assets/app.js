@@ -3,6 +3,9 @@
 
   const els = {
     root: document.getElementById("scan-root"),
+    rootPath: document.getElementById("root-path"),
+    rootForm: document.getElementById("root-form"),
+    ceiling: document.getElementById("path-ceiling"),
     path: document.getElementById("target-path"),
     form: document.getElementById("path-form"),
     scanBtn: document.getElementById("scan-btn"),
@@ -49,17 +52,29 @@
     return data;
   }
 
-  async function apiScan(path) {
+  async function apiPost(action, body) {
     const url = new URL(api, window.location.href);
-    url.searchParams.set("action", "scan");
+    url.searchParams.set("action", action);
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify(body || {}),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Scan failed");
+    if (!res.ok) throw new Error(data.error || "Request failed");
     return data;
+  }
+
+  async function apiScan(path) {
+    return apiPost("scan", { path });
+  }
+
+  function applyRootInfo(info) {
+    if (info.root) {
+      els.root.textContent = info.root;
+      els.rootPath.value = info.root;
+    }
+    if (info.ceiling) els.ceiling.textContent = info.ceiling;
   }
 
   function selectPath(path, { syncInput = true } = {}) {
@@ -448,6 +463,24 @@
     }
   }
 
+  els.rootForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const next = (els.rootPath.value || "").trim();
+    if (!next) {
+      setStatus("Enter a folder to use as scan root.", true);
+      return;
+    }
+    setStatus("Updating scan root…");
+    try {
+      const info = await apiPost("set_root", { path: next });
+      applyRootInfo(info);
+      await browse(info.root);
+      setStatus(`Scan root set to ${info.root}`);
+    } catch (err) {
+      setStatus(err.message, true);
+    }
+  });
+
   els.form.addEventListener("submit", (e) => {
     e.preventDefault();
     runScan(els.path.value);
@@ -474,8 +507,8 @@
   (async () => {
     try {
       const rootInfo = await apiGet("root");
-      els.root.textContent = rootInfo.root;
-      await browse(rootInfo.default || rootInfo.root);
+      applyRootInfo(rootInfo);
+      await browse(rootInfo.root || rootInfo.default);
     } catch (err) {
       setStatus(err.message, true);
     }
