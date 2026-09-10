@@ -113,6 +113,7 @@ body {
   overflow: auto;
   flex: 1;
   min-height: 0;
+  min-width: 0;
   padding-right: 0.15rem;
 }
 
@@ -573,15 +574,17 @@ body {
 }
 
 .findings {
-  display: grid;
-  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
 }
 
 .file-group {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--bg-elev);
-  overflow: hidden;
+  min-width: 0;
 }
 
 .file-group-head {
@@ -589,9 +592,10 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.55rem 0.85rem;
+  padding: 0.6rem 0.85rem;
   background: color-mix(in srgb, var(--bg) 55%, var(--bg-elev));
   border-bottom: 1px solid var(--line);
+  min-width: 0;
 }
 
 .file-group-name {
@@ -602,6 +606,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .file-group-count {
@@ -618,25 +623,21 @@ body {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--bg-elev);
-  overflow: hidden;
+  min-width: 0;
 }
 
 .finding-table-head {
-  display: grid;
-  grid-template-columns: 4.2rem minmax(10rem, 1.3fr) minmax(12rem, 1.8fr) 7rem 1.5rem;
-  gap: 0.65rem;
-  padding: 0.45rem 0.85rem;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 55%, var(--bg-elev));
+  display: none;
 }
 
 .finding-rows {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.finding-item {
+  min-width: 0;
 }
 
 .finding-item + .finding-item {
@@ -645,18 +646,19 @@ body {
 
 .finding-row {
   width: 100%;
-  display: grid;
-  grid-template-columns: 4.2rem minmax(8rem, 1.3fr) minmax(10rem, 1.8fr) 7rem 1.5rem;
-  gap: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.45rem 0.75rem;
   text-align: left;
-  padding: 0.55rem 0.85rem;
+  padding: 0.65rem 0.85rem;
   margin: 0;
   border: 0;
   background: transparent;
   color: var(--text);
   cursor: pointer;
   font: inherit;
+  min-width: 0;
   transition: background 0.12s ease;
 }
 
@@ -671,6 +673,7 @@ body {
 }
 
 .finding-row .sev {
+  flex-shrink: 0;
   font-family: var(--mono);
   font-size: 0.68rem;
   font-weight: 600;
@@ -678,7 +681,6 @@ body {
   padding: 0.18rem 0.4rem;
   border-radius: 3px;
   text-align: center;
-  justify-self: start;
 }
 
 .finding-row .sev.critical,
@@ -698,6 +700,7 @@ body {
 }
 
 .finding-row .loc {
+  flex: 1 1 10rem;
   min-width: 0;
 }
 
@@ -715,6 +718,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  flex: 2 1 14rem;
   min-width: 0;
   overflow: hidden;
 }
@@ -725,7 +729,8 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 46%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .finding-row .trail .src {
@@ -742,15 +747,15 @@ body {
 }
 
 .finding-row .idcell {
+  flex-shrink: 0;
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .finding-row .chev {
+  flex-shrink: 0;
+  margin-left: auto;
   color: var(--muted);
   font-size: 0.75rem;
   transition: transform 0.15s ease;
@@ -851,24 +856,6 @@ body {
   .toolbar {
     grid-template-columns: 1fr;
   }
-
-  .finding-table-head {
-    display: none;
-  }
-
-  .finding-row {
-    grid-template-columns: 4rem 1fr 1.2rem;
-    grid-template-areas:
-      "sev loc chev"
-      "trail trail trail"
-      "id id id";
-  }
-
-  .finding-row .sev { grid-area: sev; }
-  .finding-row .loc { grid-area: loc; }
-  .finding-row .trail { grid-area: trail; }
-  .finding-row .idcell { grid-area: id; }
-  .finding-row .chev { grid-area: chev; }
 }
 
 @media (max-width: 640px) {

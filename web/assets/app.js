@@ -322,28 +322,33 @@
       for (const [file, items] of groups) {
         const section = document.createElement("section");
         section.className = "file-group";
-        section.innerHTML = `
-          <header class="file-group-head">
-            <span class="file-group-name" title="${escapeHtml(file)}">${escapeHtml(relPath(file, target))}</span>
-            <span class="file-group-count">${items.length}</span>
-          </header>
-          <div class="finding-rows"></div>
-        `;
-        const rows = section.querySelector(".finding-rows");
+
+        const head = document.createElement("div");
+        head.className = "file-group-head";
+
+        const name = document.createElement("span");
+        name.className = "file-group-name";
+        name.title = file;
+        name.textContent = relPath(file, target);
+
+        const count = document.createElement("span");
+        count.className = "file-group-count";
+        count.textContent = String(items.length);
+
+        head.appendChild(name);
+        head.appendChild(count);
+
+        const rows = document.createElement("div");
+        rows.className = "finding-rows";
         items.forEach((f) => rows.appendChild(buildFindingRow(f, target, { hideFile: true })));
+
+        section.appendChild(head);
+        section.appendChild(rows);
         els.findings.appendChild(section);
       }
     } else {
       const table = document.createElement("div");
       table.className = "finding-table";
-      table.innerHTML = `
-        <div class="finding-table-head" aria-hidden="true">
-          <span>Sev</span>
-          <span>Location</span>
-          <span>Source → Sink</span>
-          <span>ID</span>
-        </div>
-      `;
       findings.forEach((f) => table.appendChild(buildFindingRow(f, target, { hideFile: false })));
       els.findings.appendChild(table);
     }
